@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="zh-Hant">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>隱私權政策 | Exam-GPTs</title>
+    <style>
+      body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, "Noto Sans", "PingFang TC", "Microsoft JhengHei", sans-serif; line-height: 1.6; color: #222; padding: 24px; max-width: 860px; margin: 0 auto; }
+      h1, h2 { line-height: 1.25; }
+      h1 { margin-top: 0; }
+      code { background: #f6f8fa; padding: 0 4px; border-radius: 3px; }
+      ul { padding-left: 20px; }
+      hr { border: 0; border-top: 1px solid #eee; margin: 24px 0; }
+      .muted { color: #666; }
+    </style>
+  </head>
+  <body>
+    <h1>GPTs 隱私權政策（Exam-GPTs）</h1>
+    <p class="muted">更新日期：2025-09-13</p>
+
+    <p>本隱私權政策適用於本專案中以 OpenAI GPTs 建立之「考題助教」功能（以下稱「本服務」）。本服務會使用你上傳的題庫檔案（例如：<code>113-1-questions-with-answers.json</code>）與你個人的 Google 試算表（分頁：<code>id</code>）進行出題、作答判定與紀錄。請在使用前詳閱本政策。</p>
+
+    <h2>收集與處理的資料類型</h2>
+    <ul>
+      <li><strong>對話內容：</strong>你於 GPTs 與本服務的互動訊息（提問、作答、指令）。</li>
+      <li><strong>作答紀錄（寫入 Google 試算表 <code>id</code> 分頁）：</strong>
+        <ul>
+          <li><code>Timestamp</code>：作答時間。</li>
+          <li><code>UserId</code>：固定為 <code>self</code>（單人使用模式）。</li>
+          <li><code>Subject</code>：科別/科目。</li>
+          <li><code>QuestionId</code>：題號。</li>
+          <li><code>Chosen</code>：你作答的選項代號（如 A/B/C/D）。</li>
+          <li><code>IsCorrect</code>：是否答對。</li>
+          <li><code>Explanation</code>：若答錯所生成或引用的詳解內容。</li>
+        </ul>
+      </li>
+      <li><strong>系統必要技術資訊：</strong>為提供功能之必要，可能包含請求時間、呼叫類型（GET/POST）、動作代碼（如 <code>filterUnanswered</code>、<code>record</code>、<code>wrong</code>、<code>status</code>、<code>health</code>）。</li>
+    </ul>
+
+    <h2>資料來源</h2>
+    <ul>
+      <li>你於對話中提供之內容。</li>
+      <li>你上傳至 GPTs 的參考檔案（題庫 JSON）。</li>
+      <li>你擁有的 Google 試算表（Apps Script Web App 讀寫）。</li>
+    </ul>
+
+    <h2>使用目的</h2>
+    <ul>
+      <li><strong>出題與避免重複：</strong>於出題前查詢試算表，僅出「未作答」題目。</li>
+      <li><strong>判分與回饋：</strong>核對題庫答案並回覆正確與否；答錯時提供詳解。</li>
+      <li><strong>學習追蹤：</strong>紀錄每題作答結果，支援重作曾錯題與簡易統計。</li>
+    </ul>
+
+    <h2>法律基礎與使用者同意</h2>
+    <p>你主動使用本服務並要求執行出題/判分/記錄等功能，視為你同意本服務依本政策處理相關資料。</p>
+
+    <h2>資料保存與刪除</h2>
+    <ul>
+      <li><strong>保存位置：</strong>作答紀錄存放於你個人的 Google 試算表中（工作表分頁：<code>id</code>）。</li>
+      <li><strong>保存期間：</strong>除非你主動刪除或更改，資料將持續保留於你的試算表中。</li>
+      <li><strong>刪除方式：</strong>你可直接在試算表中刪除相應列，或停用/移除 Apps Script Web App 部署。</li>
+    </ul>
+
+    <h2>第三方服務與資料共享</h2>
+    <ul>
+      <li>本服務不對外販售、出租或交換你的個資或作答內容。</li>
+      <li><strong>第三方處理：</strong>
+        <ul>
+          <li>OpenAI：用於模型推論（你在 GPTs 對話中輸入的內容會送至 OpenAI 伺服器處理）。</li>
+          <li>Google：Apps Script Web App 與 Google 試算表為 Google 提供之雲端服務，用以儲存與讀寫作答紀錄。</li>
+        </ul>
+      </li>
+      <li><strong>權限控管：</strong>本專案目前不使用 API Key 驗證；請務必以「限制存取」方式部署 Apps Script Web App（例如僅自己或特定帳號可用），避免未授權第三方呼叫。</li>
+    </ul>
+
+    <h2>安全性</h2>
+    <ul>
+      <li><strong>建議的安全作法：</strong>
+        <ul>
+          <li>將 Apps Script Web App 部署權限限制為「只有自己/特定使用者」。</li>
+          <li>禁止將部署 URL 公開分享於公開管道。</li>
+          <li>定期檢視試算表分享設定與存取記錄。</li>
+        </ul>
+      </li>
+      <li><strong>風險告知：</strong>網路傳輸與雲端服務均存在風險；請避免在題庫或詳解中放入個人敏感資訊。</li>
+    </ul>
+
+    <h2>Cookies 與追蹤</h2>
+    <p>本服務不主動設置 Cookies。你使用 GPTs 與 Google 服務時，可能受其平台既有之 Cookies/追蹤政策約束，請參考各平台官方說明。</p>
+
+    <h2>未成年人保護</h2>
+    <p>如你未滿法定年齡，應在家長或監護人同意與監督下使用本服務。</p>
+
+    <h2>使用者權利</h2>
+    <ul>
+      <li>查閱：直接於試算表檢視紀錄。</li>
+      <li>更正：修正錯誤欄位（如 Subject、Explanation 等）。</li>
+      <li>刪除：刪除特定紀錄列或整個分頁。</li>
+      <li>停用：關閉或移除 Apps Script Web App 部署，並刪除題庫檔案與任何備份。</li>
+    </ul>
+
+    <h2>政策變更</h2>
+    <p>本政策可能因功能或法規調整而更新；更新後之版本與日期將刊載於本頁。</p>
+
+    <h2>聯絡方式</h2>
+    <p>若你對本政策或資料處理有任何疑問，請聯繫專案維護者（請於此處填入聯絡 Email 或表單連結）。</p>
+
+    <hr />
+    <p class="muted">附註：本頁位於 <code>Exam-GPTs/privacy.html</code>，僅作為本專案 GPTs 功能之隱私說明。實際資料控制者為擁有 Google 試算表與 Apps Script 部署之帳戶持有人。</p>
+  </body>
+  </html>
+
