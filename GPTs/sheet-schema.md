@@ -15,7 +15,7 @@
 
 與 GPTs Actions 的使用對應：
 - 出題前：POST `/`，`{ action: "filterUnanswered", subject?, questionIds: [候選ID] }` → 回傳 `unansweredQuestionIds`。
-- 判分寫回：POST `/`，`{ action: "record", subject, questionId, chosen, isCorrect, explanation? }`。
+- 判分寫回：POST `/`，`{ action: "record", year_roc, subject, questionId, chosen, isCorrect, explanation? }`（year_roc 為寫入目標年分分頁，如 108~113；亦相容舊欄位 year）。
 - 取曾錯題：GET `/?action=wrong&subject=...` → 回傳 `wrongQuestionIds`。
 
 備註：

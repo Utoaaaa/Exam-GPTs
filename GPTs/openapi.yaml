@@ -1,36 +1,70 @@
 openapi: 3.1.0
 info:
-  title: Quiz Records API (Google Apps Script)
-  version: 1.0.0
+  title: Quiz Records API (GAS) - GPT Optimized
+  version: 1.0.5
+
 servers:
-  - url: https://script.google.com/macros/s/AKfycbyjx-dKNzVGfLqnrGpjvcG7KDkZeU3tGVvDimj4_HnoxzwHAM-qJWH3I5xXU518FqQI
+  - url: https://script.google.com
+
 paths:
-  /exec:
+  /macros/s/AKfycbxYqHcJRklpXakgYrpYa2RxW1TSuevYwNLJBtXp2I2WiGIEk5Ia5r5VMVfM7QDCY05p/exec:
     get:
-      operationId: query
-      summary: Query answered/wrong/status
-      description: Use action=status|answered|wrong to query records. Single-user mode; no userId.
+      operationId: quizAPI
+      summary: 醫學考試記錄 API
       parameters:
-        - in: query
-          name: action
+        - name: action
+          in: query
           required: true
+          description: 操作類型
           schema:
             type: string
-            enum: [status, answered, wrong, health]
-        
-        - in: query
-          name: subject
-          required: false
+            enum: [health, status, answered, wrong, record, filterunanswered]
+        - name: subject
+          in: query
+          description: 科目名稱
           schema:
             type: string
-        - in: query
-          name: questionId
-          required: false
+        - name: questionId
+          in: query
+          description: 題目ID
           schema:
             type: string
+        - name: questionIds
+          in: query
+          description: 題目ID列表（逗號分隔）
+          schema:
+            type: string
+        - name: chosen
+          in: query
+          description: 選擇的答案
+          schema:
+            type: string
+        - name: isCorrect
+          in: query
+          description: 是否正確
+          schema:
+            type: string
+            enum: ["true", "false"]
+        - name: explanation
+          in: query
+          description: 詳解
+          schema:
+            type: string
+        - name: year_roc
+          in: query
+          description: 民國年份
+          schema:
+            type: string
+            enum: ["108","109","110","111","112","113"]
+        - name: year
+          in: query
+          description: 年份（向下相容）
+          schema:
+            type: string
+            enum: ["108","109","110","111","112","113"]
       responses:
         '200':
-          description: Successful query
+          description: 成功回應
           content:
             application/json:
               schema:
@@ -38,83 +72,44 @@ paths:
                 properties:
                   ok:
                     type: boolean
-                    description: Present for health checks.
-                  now:
-                    type: string
-                    description: ISO timestamp for health checks.
-                  answered:
-                    type: boolean
-                    description: Whether a specific question has been answered.
-                  isCorrect:
-                    type: boolean
-                    nullable: true
-                    description: Latest correctness for a specific question.
-                  lastResponse:
-                    type: object
-                    nullable: true
-                    description: Latest record payload for that question and user.
+                    description: 操作是否成功
                   answeredQuestionIds:
                     type: array
                     items:
                       type: string
-                    description: Set when action=answered.
+                    description: 已作答題目ID列表
                   wrongQuestionIds:
                     type: array
                     items:
                       type: string
-                    description: Set when action=wrong.
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorized
-        '500':
-          description: Server error
-    post:
-      operationId: command
-      summary: Record attempt or filter unanswered
-      description: Use action=record|filterUnanswered to modify/query by body. Single-user; no userId.
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              type: object
-              required: [action]
-              properties:
-                action:
-                  type: string
-                  enum: [record, filterUnanswered]
-                subject:
-                  type: string
-                questionId:
-                  type: string
-                chosen:
-                  type: string
-                isCorrect:
-                  type: boolean
-                explanation:
-                  type: string
-                questionIds:
-                  type: array
-                  items:
-                    type: string
-      responses:
-        '200':
-          description: Successful command
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  ok:
-                    type: boolean
+                    description: 錯誤題目ID列表
                   unansweredQuestionIds:
                     type: array
                     items:
                       type: string
+                    description: 未作答題目ID列表
+                  wroteTo:
+                    type: object
+                    properties:
+                      sheetName:
+                        type: string
+                    description: 寫入的工作表資訊
+                  error:
+                    type: string
+                    description: 錯誤訊息
+                  now:
+                    type: string
+                    description: 當前時間（健康檢查用）
+                  answered:
+                    type: boolean
+                    description: 題目是否已作答
+                  isCorrect:
+                    type: boolean
+                    description: 最新作答是否正確
+                  lastResponse:
+                    type: object
+                    description: 最新作答記錄
         '400':
-          description: Bad request
-        '401':
-          description: Unauthorized
+          description: 請求錯誤
         '500':
-          description: Server error
+          description: 伺服器錯誤

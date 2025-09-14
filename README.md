@@ -24,11 +24,13 @@
 - `Exam-GPTs/Question-Bank/*.json`：108～113 年題庫。
 
 ## 後端部署（Google Apps Script）
-1) 建立或開啟一份 Google 試算表。
+1) 建立或開啟一份 Google 試算表，複製其網址中的試算表 ID。
 - 建議預先建立分頁 `108`、`109`、`110`、`111`、`112`、`113`；若未建立，程式會在首次寫入時自動建立並填上標題列。
 - 欄位：`Timestamp | Subject | QuestionId | Chosen | IsCorrect | Explanation`。
 
-2) 在 Apps Script 專案中新增腳本，貼上 `Exam-GPTs/GPTs/apps-script.gs` 完整內容。
+2) 在 Apps Script 專案中新增腳本，貼上 `Medical-Exam-GPTs/GPTs/apps-script.gs` 完整內容。
+   - 設定「指令碼內容的屬性」（Script Properties）：新增鍵 `SPREADSHEET_ID`，值為步驟 1 的試算表 ID。
+   - 或者在檔頭自行加入 `const SPREADSHEET_ID = '...';`（不建議硬編碼到版本控制）。
 
 3) 發佈為網路應用程式（Web App）：
 - 新版編輯器：點選「部署」→「管理部署」→「新部署」→ 類型選「網路應用程式」。
@@ -37,7 +39,7 @@
 
 4) 更新 Actions 設定：
 - 可直接在自訂 GPT 的 Actions 設定中輸入你的 `/exec` URL。
-- 或更新 `Exam-GPTs/GPTs/openapi.yaml` 的 `servers[0].url` 為你的部署網址。
+- 或更新 `Medical-Exam-GPTs/GPTs/openapi.yaml` 的 `servers[0].url` 為你的部署網址。
 
 ## 自訂 GPT 設定
 - 建立一個新的自訂 GPT。
@@ -70,8 +72,9 @@
 - `GET /exec?action=wrong&subject={科目?}` 取得「最新一次仍錯誤」題目ID集合
 - `POST /exec`，`{"action":"filterUnanswered","subject":"科目?","questionIds":[...]} → { unansweredQuestionIds: [...] }`
 - `POST /exec`，`{"action":"record","subject":"科目","questionId":"...","chosen":"B","isCorrect":true,"explanation":"..."}`
+- `POST /exec`（JSON body）：`{"action":"record","year_roc":113,"subject":"科目","questionId":"...","chosen":"B","isCorrect":true,"explanation":"..."}`（year_roc 指定寫入 108～113 的哪個分頁；isCorrect 使用布林值；相容舊欄位 year）
 
-> 備註：系統會依 `questionId` 解析 ROC 年分（如 `Q-108-...`），並自動寫入對應分頁。
+> 備註：系統會優先使用參數 `year_roc`（相容舊欄位 `year`）；若省略，會依 `questionId` 解析 ROC 年分（如 `Q-108-...`）並自動寫入對應分頁。
 
 ## 安全與注意事項
 - 本專案預設不驗證 apiKey、允許公開存取，請依實際需求調整 Apps Script 的驗證策略。
