@@ -1,0 +1,120 @@
+openapi: 3.1.0
+info:
+  title: Quiz Records API (Google Apps Script)
+  version: 1.0.0
+servers:
+  - url: https://script.google.com/macros/s/AKfycbyjx-dKNzVGfLqnrGpjvcG7KDkZeU3tGVvDimj4_HnoxzwHAM-qJWH3I5xXU518FqQI
+paths:
+  /exec:
+    get:
+      operationId: query
+      summary: Query answered/wrong/status
+      description: Use action=status|answered|wrong to query records. Single-user mode; no userId.
+      parameters:
+        - in: query
+          name: action
+          required: true
+          schema:
+            type: string
+            enum: [status, answered, wrong, health]
+        
+        - in: query
+          name: subject
+          required: false
+          schema:
+            type: string
+        - in: query
+          name: questionId
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Successful query
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                    description: Present for health checks.
+                  now:
+                    type: string
+                    description: ISO timestamp for health checks.
+                  answered:
+                    type: boolean
+                    description: Whether a specific question has been answered.
+                  isCorrect:
+                    type: boolean
+                    nullable: true
+                    description: Latest correctness for a specific question.
+                  lastResponse:
+                    type: object
+                    nullable: true
+                    description: Latest record payload for that question and user.
+                  answeredQuestionIds:
+                    type: array
+                    items:
+                      type: string
+                    description: Set when action=answered.
+                  wrongQuestionIds:
+                    type: array
+                    items:
+                      type: string
+                    description: Set when action=wrong.
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
+    post:
+      operationId: command
+      summary: Record attempt or filter unanswered
+      description: Use action=record|filterUnanswered to modify/query by body. Single-user; no userId.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [action]
+              properties:
+                action:
+                  type: string
+                  enum: [record, filterUnanswered]
+                subject:
+                  type: string
+                questionId:
+                  type: string
+                chosen:
+                  type: string
+                isCorrect:
+                  type: boolean
+                explanation:
+                  type: string
+                questionIds:
+                  type: array
+                  items:
+                    type: string
+      responses:
+        '200':
+          description: Successful command
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  ok:
+                    type: boolean
+                  unansweredQuestionIds:
+                    type: array
+                    items:
+                      type: string
+        '400':
+          description: Bad request
+        '401':
+          description: Unauthorized
+        '500':
+          description: Server error
