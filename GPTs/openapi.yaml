@@ -7,7 +7,7 @@ servers:
   - url: https://script.google.com
 
 paths:
-  /macros/s/AKfycbxYqHcJRklpXakgYrpYa2RxW1TSuevYwNLJBtXp2I2WiGIEk5Ia5r5VMVfM7QDCY05p/exec:
+  /macros/s/部署ID/exec:
     get:
       operationId: quizAPI
       summary: 醫學考試記錄 API
